@@ -1,0 +1,36 @@
+name: Retag action
+description: Add a tag to a docker image
+inputs:
+  image:
+    description: Image name
+    required: true
+    type: string
+  tag:
+    description: Current tag
+    required: true
+    type: string
+  new-tag:
+    description: New tag
+    required: true
+    type: string
+  token:
+    description: "GitHub token for logging into the ghcr container registry"
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ inputs.token }}
+
+    - name: Add a tag to an image
+      shell: bash
+      run: |
+        docker pull ghcr.io/${{ inputs.image }}:${{ inputs.tag }}
+        docker tag ghcr.io/${{ inputs.image }}:${{ inputs.tag }} ghcr.io/${{ github.repository }}:${{ inputs.new-tag }}
+        docker push ghcr.io/${{ inputs.image }}:${{ inputs.new-tag }}
