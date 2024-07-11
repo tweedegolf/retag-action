@@ -19,7 +19,11 @@ jobs:
       # ...
       - name: Retag the docker image
         uses: tweedegolf/retag-action@main
-        
+        with:
+          image: ${{ github.repository }}
+          tag: ${{ env.tag }}
+          new-tag: ${{ input.env }}-${{ env.tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # ...
 
