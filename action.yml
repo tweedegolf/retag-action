@@ -15,8 +15,9 @@ inputs:
     type: string
   token:
     description: "GitHub token for logging into the ghcr container registry"
-    required: true
+    required: false
     type: string
+    default: ${{ github.token }}
 
 runs:
   using: composite
